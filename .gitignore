@@ -1,0 +1,60 @@
+# =========================
+# Node / Frontend
+# =========================
+node_modules/
+dist/
+build/
+
+# =========================
+# Python
+# =========================
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# =========================
+# AI / ML files
+# =========================
+datasets/
+ai-engine/data/
+vectorstore/
+embeddings/
+
+*.csv
+*.npy
+*.npz
+*.pkl
+*.faiss
+*.h5
+*.pt
+*.bin
+
+# =========================
+# Environment variables
+# =========================
+.env
+backend/.env
+frontend/.env
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/

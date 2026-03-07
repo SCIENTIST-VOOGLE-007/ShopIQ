@@ -1,0 +1,12 @@
+pandas
+numpy
+scikit-learn
+faiss-cpu
+sentence-transformers
+ollama
+fastapi
+uvicorn
+tqdm
+matplotlib
+seaborn
+reportlab
