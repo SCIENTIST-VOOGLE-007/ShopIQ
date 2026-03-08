@@ -24,7 +24,7 @@ export const getProfileApi = (userId) =>
   api.get(`/users/profile?userId=${encodeURIComponent(userId)}`)
 
 // ai/chat
-export const chatApi = (message) =>
-  api.post('/ai/chat', { message })
+export const chatApi = (message, profile = {}) =>
+  api.post('/ai/chat', { message, profile })
 
 export default api

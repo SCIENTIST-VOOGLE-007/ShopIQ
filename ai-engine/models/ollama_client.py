@@ -3,7 +3,7 @@ import requests
 
 OLLAMA_BASE_URL = "http://localhost:11434/api"
 
-LLM_MODEL = "llama3"
+LLM_MODEL = "tinyllama"  # Changed to tinyllama (very small model)
 EMBED_MODEL = "nomic-embed-text"
 
 
