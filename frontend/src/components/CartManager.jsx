@@ -16,7 +16,9 @@ return(
 
 <h2>Your Cart</h2>
 
-{cart.length===0 && <p>No items yet</p>}
+{cart.length===0 && (
+  <p>No items yet. This cart currently works as a placeholder; integration with e-commerce platforms and persistence will be added soon.</p>
+)}
 
 {cart.map(item=>(
 

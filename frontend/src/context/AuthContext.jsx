@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react"
+import { registerUserApi, loginUserApi, updateProfileApi } from "../services/api"
 
 export const AuthContext = createContext()
 
@@ -21,19 +22,11 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (name, email, password) => {
     try {
-      const response = await fetch("http://localhost:5000/api/user/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      })
-      const data = await response.json()
-      if (response.ok) {
-        setUser({ id: data._id, name: data.name, email: data.email })
-        localStorage.setItem("user", JSON.stringify({ id: data._id, name: data.name, email: data.email }))
-        return data
-      } else {
-        throw new Error(data.error || "Registration failed")
-      }
+      const res = await registerUserApi(name, email, password)
+      const data = res.data
+      setUser({ id: data._id, name: data.name, email: data.email, profile: data.profile })
+      localStorage.setItem("user", JSON.stringify({ id: data._id, name: data.name, email: data.email, profile: data.profile }))
+      return data
     } catch (error) {
       throw error
     }
@@ -41,20 +34,11 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      // For now, we'll register as login (backend needs proper login endpoint)
-      const response = await fetch("http://localhost:5000/api/user/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: email, email, password }),
-      })
-      const data = await response.json()
-      if (response.ok) {
-        setUser({ id: data._id, name: data.name, email: data.email })
-        localStorage.setItem("user", JSON.stringify({ id: data._id, name: data.name, email: data.email }))
-        return data
-      } else {
-        throw new Error(data.error || "Login failed")
-      }
+      const res = await loginUserApi(email, password)
+      const data = res.data
+      setUser({ id: data._id, name: data.name, email: data.email, profile: data.profile })
+      localStorage.setItem("user", JSON.stringify({ id: data._id, name: data.name, email: data.email, profile: data.profile }))
+      return data
     } catch (error) {
       throw error
     }
@@ -65,15 +49,38 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("user")
   }
 
-  const updateProfile = (updates) => {
-    setUser(prev => ({
-      ...prev,
-      ...updates
-    }))
-    localStorage.setItem("user", JSON.stringify({
-      ...user,
-      ...updates
-    }))
+  const updateProfile = async (updates) => {
+    try {
+      if (!user || !user.id) throw new Error("No user logged in")
+
+      // if caller passed a full user object (e.g. result from getProfileApi)
+      if (updates && updates._id && updates.profile) {
+        const normalized = {
+          id: updates._id,
+          name: updates.name,
+          email: updates.email,
+          profile: updates.profile
+        }
+        setUser(normalized)
+        localStorage.setItem("user", JSON.stringify(normalized))
+        return normalized
+      }
+
+      const res = await updateProfileApi(user.id, updates)
+      const data = res.data
+      const normalized = {
+        id: data._id,
+        name: data.name,
+        email: data.email,
+        profile: data.profile
+      }
+      setUser(normalized)
+      localStorage.setItem("user", JSON.stringify(normalized))
+      return normalized
+    } catch (err) {
+      console.error("updateProfile error", err)
+      throw err
+    }
   }
 
   return (

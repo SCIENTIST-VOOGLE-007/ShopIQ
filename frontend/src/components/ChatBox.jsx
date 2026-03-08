@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { chatApi } from "../services/api"
 
 function ChatBox() {
 
@@ -19,21 +20,16 @@ function ChatBox() {
     setLoading(true)
 
     try {
-      const response = await fetch("http://localhost:5000/api/ai/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message })
-      })
-
-      const data = await response.json()
-      const botMsg = { 
-        sender: "bot", 
-        text: data.reply || "I'm having trouble processing your request. Please try again."
+      const res = await chatApi(message)
+      const data = res.data
+      const botMsg = {
+        sender: "bot",
+        text: data.response || "I'm having trouble processing your request. Please try again."
       }
       setMessages(prev => [...prev, botMsg])
     } catch (error) {
-      const botMsg = { 
-        sender: "bot", 
+      const botMsg = {
+        sender: "bot",
         text: "Sorry, I couldn't connect to the AI service. Please make sure the backend is running."
       }
       setMessages(prev => [...prev, botMsg])

@@ -40,7 +40,7 @@ function App() {
                 <Link to="/dashboard">Dashboard</Link>
                 <Link to="/cart">Cart</Link>
                 <Link to="/orders">Orders</Link>
-                <span className="user-info">{user.name}</span>
+                <Link to="/profile" className="user-info">{user.name}</Link>
                 <button className="logout-btn" onClick={handleLogout}>Logout</button>
               </>
             ) : (
